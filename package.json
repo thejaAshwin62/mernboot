@@ -1,6 +1,6 @@
 {
   "name": "mernboot",
-  "version": "1.0.6",
+  "version": "1.0.10",
   "description": "A powerful CLI tool for generating full-stack MERN applications...",
   "main": "index.js",
   "bin": {

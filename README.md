@@ -1,6 +1,6 @@
 <p align="center">
 <img src="https://i.ibb.co/RkhVtGqr/mern-starter.png" alt="MERNBoot" width="300px" style="background-color: #ffffff; padding: 20px; border-radius: 10px;"/>
-</p>  
+</p>
 
 <div align="center">
 
@@ -16,13 +16,27 @@
 
 ## 🚀 Quick Start
 
-```bash
-# Create a new MERN project
-npx mernboot my-app
+### New Project
 
-# Or install globally
+```bash
+# Create a new MERN project (No installation needed)
+npx mernboot
+```
+
+### Existing Project
+
+```bash
+# If you already have a package.json
+npm install mernboot
+npm run mernboot
+```
+
+### Global Installation
+
+```bash
+# Optional: Install globally to use anywhere
 npm install -g mernboot
-mernboot my-app
+mernboot
 ```
 
 ## ✨ Features
@@ -82,8 +96,7 @@ my-app/
 ### 1. Create Your Project
 
 ```bash
-npx mernboot my-app
-cd my-app
+npx mernboot
 ```
 
 ### 2. MongoDB Setup
@@ -152,7 +165,7 @@ NODE_ENV=development
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-##  Acknowledgments
+## Acknowledgments
 
 - MongoDB Atlas for database hosting
 - Express.js for backend framework

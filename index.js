@@ -32,7 +32,7 @@ const banner = `
 console.log(chalk.blue.bold(banner));
 
 async function showMenu() {
-  console.log("\n" + chalk.blue.bold("🚀 MERNBoot Project Generator"));
+  console.log("\n" + chalk.blue.bold("🚀 MERN Stack Project Generator"));
   console.log(chalk.gray("-----------------------------"));
   console.log(chalk.white("1. MongoDB Atlas Setup"));
   console.log(chalk.white("2. Get MongoDB URL"));
@@ -216,7 +216,7 @@ async function checkAtlasAuth() {
 
 async function storeAtlasConfig(config) {
   const userHomeDir = os.homedir();
-  const configDir = path.join(userHomeDir, ".mernboot");
+  const configDir = path.join(userHomeDir, ".mern-starter");
   const configFile = path.join(configDir, "atlas-config.json");
 
   // Create directory if it doesn't exist
@@ -230,7 +230,11 @@ async function storeAtlasConfig(config) {
 
 async function getStoredAtlasConfig() {
   const userHomeDir = os.homedir();
-  const configFile = path.join(userHomeDir, ".mernboot", "atlas-config.json");
+  const configFile = path.join(
+    userHomeDir,
+    ".mern-starter",
+    "atlas-config.json"
+  );
 
   if (fs.existsSync(configFile)) {
     return JSON.parse(fs.readFileSync(configFile, "utf8"));
