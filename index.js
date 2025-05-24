@@ -132,13 +132,12 @@ async function createViteReact(location) {
     const appCssDest = path.join(clientPath, "src", "App.css");
     fs.copyFileSync(appCssSource, appCssDest);
 
-    // Update index.html to use infinity.svg as favicon
+    // Update index.html to use infinity.svg as favicon and change title
     const indexHtmlPath = path.join(clientPath, "index.html");
     let indexHtmlContent = fs.readFileSync(indexHtmlPath, "utf8");
-    indexHtmlContent = indexHtmlContent.replace(
-      'href="/vite.svg"',
-      'href="/infinity.svg"'
-    );
+    indexHtmlContent = indexHtmlContent
+      .replace('href="/vite.svg"', 'href="/infinity.svg"')
+      .replace("<title>Vite + React</title>", "<title>MERNBOOT</title>");
     fs.writeFileSync(indexHtmlPath, indexHtmlContent);
 
     spinner.succeed(chalk.green("Copied template files"));

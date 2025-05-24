@@ -10,7 +10,7 @@
     "dev:server": "nodemon server.js",
     "dev:client": "cd client && npm run dev",
     "dev:all": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "setup": "mernboot"
+    "mernboot": "mernboot"
   },
   "author": "Generated with MERNBoot",
   "license": "MIT",
@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "concurrently": "^8.0.1",
-    "nodemon": "^3.0.0"
+    "nodemon": "^3.0.0",
+    "mernboot": "^1.0.5"
   }
 }

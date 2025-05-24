@@ -1,5 +1,5 @@
 <p align="center">
-<img src="configs/React-Template/info.png" alt="MERNBoot" width="300px" style="background-color: #ffffff; padding: 20px; border-radius: 10px;"/>
+<img src="https://i.ibb.co/RkhVtGqr/mern-starter.png" alt="MERNBoot" width="300px" style="background-color: #ffffff; padding: 20px; border-radius: 10px;"/>
 </p>  
 
 <div align="center">

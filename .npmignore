@@ -1,6 +1,5 @@
 # Development directories
 test/
-configs/
 .vscode/
 .git/
 .github/
