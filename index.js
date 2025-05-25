@@ -169,27 +169,87 @@ export default defineConfig({
 
 async function checkAtlasCLI() {
   try {
-    execSync("atlas --version", { stdio: "ignore" });
-    return true;
+    // Check if atlas command exists and is executable
+    const output = execSync("atlas --version", { encoding: 'utf8' });
+    if (output && output.trim()) {
+      console.log(chalk.green("\n✅ MongoDB Atlas CLI is already installed."));
+      console.log(chalk.gray("Version: " + output.trim()));
+      return true;
+    }
+    return false;
   } catch (error) {
     return false;
   }
 }
 
+async function showAtlasInstallMenu() {
+  console.log("\n" + chalk.blue.bold("📦 MongoDB Atlas CLI Installation"));
+  console.log(chalk.gray("-----------------------------"));
+  console.log(chalk.white("1. Automatic Installation (Recommended)"));
+  console.log(chalk.white("2. Manual Installation"));
+  console.log(chalk.white("3. Back to previous menu"));
+
+  const choice = await question(chalk.yellow("\nSelect an option (1-3): "));
+  return choice;
+}
+
+async function showManualInstallInstructions() {
+  console.clear();
+  console.log(chalk.blue.bold("\n📋 Manual Installation Instructions"));
+  console.log(chalk.gray("-----------------------------"));
+  console.log(chalk.white("\n1. Visit the official MongoDB Atlas CLI download page:"));
+  console.log(chalk.cyan("   https://www.mongodb.com/try/download/atlas-cli"));
+  console.log(chalk.white("\n2. Download the appropriate version for your operating system"));
+  console.log(chalk.white("\n3. Follow the installation instructions for your platform:"));
+  console.log(chalk.white("\n   Windows:"));
+  console.log(chalk.gray("   - Run the downloaded .msi installer"));
+  console.log(chalk.gray("   - Follow the installation wizard"));
+  console.log(chalk.gray("   - Add MongoDB Atlas CLI to your system PATH"));
+  console.log(chalk.white("\n   macOS:"));
+  console.log(chalk.gray("   - Use Homebrew: brew install mongodb-atlas-cli"));
+  console.log(chalk.white("\n   Linux:"));
+  console.log(chalk.gray("   - Use the package manager for your distribution"));
+  console.log(chalk.gray("   - Or download and extract the binary"));
+  console.log(chalk.white("\n4. Verify installation by running:"));
+  console.log(chalk.cyan("   atlas --version"));
+  console.log(chalk.gray("\n-----------------------------"));
+  console.log(chalk.yellow("\nPress Enter to return to the previous menu..."));
+  await question("");
+}
+
 async function installAtlasCLI() {
-  const spinner = ora("Installing MongoDB Atlas CLI...").start();
   try {
-    execSync("winget install -e --id MongoDB.MongoDBAtlasCLI", {
-      stdio: "inherit",
-    });
-    spinner.succeed(
-      chalk.green("✅ MongoDB Atlas CLI installed successfully!")
-    );
-    return true;
+    const installChoice = await showAtlasInstallMenu();
+
+    switch (installChoice) {
+      case "1":
+        const spinner = ora("Installing MongoDB Atlas CLI automatically...").start();
+        try {
+          // Force install with all permissions and accept terms
+          execSync("winget install -e --id MongoDB.MongoDBAtlasCLI --accept-source-agreements --accept-package-agreements --force", {
+            stdio: "inherit"
+          });
+          spinner.succeed(chalk.green("✅ MongoDB Atlas CLI installed successfully!"));
+          return true;
+        } catch (error) {
+          spinner.fail(chalk.red("❌ Failed to install MongoDB Atlas CLI:") + " " + error.message);
+          console.log(chalk.yellow("\n⚠️ Please try manual installation instead."));
+          return false;
+        }
+
+      case "2":
+        await showManualInstallInstructions();
+        return false;
+
+      case "3":
+        return false;
+
+      default:
+        console.log(chalk.red("\n❌ Invalid option. Please try again."));
+        return false;
+    }
   } catch (error) {
-    spinner.fail(
-      chalk.red("❌ Failed to install MongoDB Atlas CLI:") + " " + error.message
-    );
+    console.error(chalk.red("❌ Installation process failed:") + " " + error.message);
     return false;
   }
 }
@@ -306,13 +366,18 @@ async function setupMongoDBAtlas() {
   try {
     const isAtlasInstalled = await checkAtlasCLI();
     if (!isAtlasInstalled) {
-      spinner.start(chalk.blue("Installing MongoDB Atlas CLI..."));
+      console.log(chalk.yellow("\n⚠️ MongoDB Atlas CLI is not installed."));
       const installed = await installAtlasCLI();
       if (!installed) {
-        spinner.fail(chalk.red("Failed to install MongoDB Atlas CLI"));
+        console.log(chalk.red("\n❌ Failed to install MongoDB Atlas CLI"));
         throw new Error("Failed to install MongoDB Atlas CLI");
       }
-      spinner.succeed(chalk.green("MongoDB Atlas CLI installed"));
+      // Verify installation after attempting to install
+      const verifyInstall = await checkAtlasCLI();
+      if (!verifyInstall) {
+        console.log(chalk.red("\n❌ Installation verification failed"));
+        throw new Error("MongoDB Atlas CLI installation verification failed");
+      }
     }
 
     while (true) {
